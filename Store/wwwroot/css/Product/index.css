@@ -1,0 +1,18 @@
+﻿body {
+    text-align: center;
+}
+
+
+.custom-div {
+    background-color: whitesmoke;
+    margin: 10px;
+}
+
+
+.product-image {
+    max-height: 200px;
+}
+
+.btn-primary {
+    margin-bottom: 10px;
+}

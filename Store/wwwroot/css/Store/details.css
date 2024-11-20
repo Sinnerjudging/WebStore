@@ -1,0 +1,12 @@
+﻿body {
+    text-align: center;
+}
+
+
+.product-image {
+    max-height: 500px;
+}
+
+.logo-image {
+    max-height: 100px;
+}

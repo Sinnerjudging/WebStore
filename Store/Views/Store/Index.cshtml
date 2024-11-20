@@ -1,0 +1,204 @@
+﻿@model Store.ViewModels.StoreViewModel
+@{
+    ViewData["Title"] = "Store";
+}
+
+<head>
+    <link href="~/css/style.css" rel="stylesheet" />
+</head>
+
+
+<div class="body">
+    <div class="product-list container my-5">
+        <div class="row">
+            <!-- Cột Category -->
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-10">
+                <div class="row g-4 list-product-group">
+                    @{
+                        int i = 0;
+                    }
+                    @foreach (var product in Model.Products)
+                    {
+                        if (product.Stock.Any())
+                        {
+
+                            <div class="col-md-4">
+                                <div class="card h-100">
+                                    <div class="product-image">
+                                        <img src="images/@product.PhotoPath" class="card-img-top" alt="Product Image">
+
+                                        <form id="myForm" method="post">
+                                            <div class="form-row justify-content-center" style="margin-top:20px;">
+
+                                                <select id="select-@i" style="margin-top:5px; margin-bottom:15px;" class="form-control col-md-2">
+                                                    @foreach (var item in product.Stock)
+                                                    {
+                                                        <option value="@item.Id">@item.Name</option>
+                                                    }
+                                                </select>
+                                                @if (product.CategoryId == 1)
+                                                {
+                                                    <label for="select-@i" class="col-md-2 col-form-label" style="margin-top:5px;">cm</label>
+                                                }
+                                                <button style="height:45px" id="save-@i" type="button" value="Submit" class="btn btn-success">Add to cart</button>
+                                                <div class="container">
+                                                    <button type="button" class="btn btn-primary btn" style="margin-top:10px;"
+                                                            onclick="location.href = '@Url.Action("Details", "Store",new{product.Id})'">
+                                                        View details
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                    <div class="card-body">
+                                        <p>@Html.DisplayText(" ") @product.Name</p>
+                                        <p class="card-text">
+                                            <a href="https://koiservice.vn/product/doitsu-shiro-18-22cm-trai-shinoda-unknown/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">Doitsu Shiro – 18-22cm – Trại Shinoda – Unknown</a>
+                                        </p>
+                                        <p>@product.Price vnd</p>
+                                    </div>
+                                </div>
+                            </div>
+                            { i++; }
+                        }
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
+    <div class="toast-header">
+        <img src="~/images/logo-ca-Koi-25.png" class="rounded mr-2" alt="..." height="20">
+        <strong class="mr-auto">Store</strong>
+        <small>Just</small>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="toast-body">
+        Added to cart!
+    </div>
+</div>
+
+
+<style>
+    .toast {
+        font-size: 15px;
+        position: fixed;
+        left: 50px;
+        top: 200px;
+    }
+
+        .toast small {
+            font-size: 10px;
+        }
+</style>
+
+
+@section scripts {
+    <script>
+        if (getCookie('counter') === "" || getCookie('counter') === null) {
+            var counter = 0;
+        }
+        else {
+            var counter = getCookie('counter');
+        }
+
+
+
+
+        $(document).ready(function () {
+            handler();
+        });
+
+
+        var toast = function () {
+            $('.toast').toast('show');
+            setTimeout(function () {
+                $('.toast').fadeOut('slow');
+            }, 3000); // <-- time in milliseconds
+        }
+
+
+        var handler = function () {
+
+            for (var i = 0; i < '@i'; i++) {
+                saveBtnHanlder(i);
+            }
+
+        }
+
+        var saveBtnHanlder = function (i) {
+            $('#save-'.concat(i)).click(function () {
+                sendData(i);
+            });
+        }
+
+
+        var sendData = function (i) {
+
+            var data = new FormData();
+
+            var stockId = $('#select-'.concat(i)).val();
+
+            data.append('id', stockId);
+            counter++;
+            data.append('counter', counter);
+
+
+            var ajaxConfig = {
+                type: "POST",
+                url: "/Store/Cart",
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    //alert('Pomyślnie dodano do Cartu!');
+                    toast();
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000); // <-- time in milliseconds
+
+                },
+                error: function (xhr, status) {
+                    alert('You must be logged in!');
+                }
+            }
+            $.ajax(ajaxConfig);
+
+        }
+
+
+
+
+
+        //function setCookie(name, value, days) {
+        //    var expires = "";
+        //    if (days) {
+        //        var date = new Date();
+        //        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        //        expires = "; expires=" + date.toUTCString();
+        //    }
+        //    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        //}
+
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+    </script>
+}

@@ -1,0 +1,191 @@
+﻿@model Store.ViewModels.UserFormViewModel
+@{
+    ViewData["Title"] = "Edit data";
+}
+
+<h1>Edit data</h1>
+
+<hr />
+
+
+<form id="myForm" enctype="multipart/form-data">
+
+    @Html.AntiForgeryToken()
+
+    <div class="validation-summary-errors">
+        @Html.ValidationSummary()
+    </div>
+
+    <div class="form-row form-group">
+        <div class="col-md-3">
+            @Html.LabelFor(u => u.FirstName)
+            @Html.TextBoxFor(u => u.FirstName,
+                new { @class = "form-control" })
+            @Html.ValidationMessageFor(u => u.FirstName)
+        </div>
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-3">
+
+            @Html.LabelFor(c => c.LastName)
+            @Html.TextBoxFor(c => c.LastName,
+                new { @class = "form-control" })
+            @Html.ValidationMessageFor(u => u.LastName)
+        </div>
+    </div>
+
+    <br />
+
+    <div class="form-group form-row">
+        <div class="col-md-3">
+            @Html.LabelFor(c => c.PhoneNumber)
+            @Html.TextBoxFor(c => c.PhoneNumber,
+                new { @class = "form-control" })
+            @Html.ValidationMessageFor(u => u.PhoneNumber)
+        </div>
+
+        <div class="col-md-1"></div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(c => c.Email)
+            @Html.TextBoxFor(c => c.Email,
+                new { @class = "form-control" })
+            @Html.ValidationMessageFor(u => u.City)
+        </div>
+
+    </div>
+
+    <div class="form-group form-row">
+        <div class="col-md-3">
+            @Html.LabelFor(c => c.GenderId)
+            @Html.DropDownListFor(c => c.GenderId,
+                new SelectList(Model.Genders, "Id", "Name"),
+                "Select gender", new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group form-row">
+        <div class="col-md-3">
+            @Html.LabelFor(c => c.Address1)
+            @Html.TextBoxFor(c => c.Address1,
+                new { @class = "form-control" })
+            @Html.ValidationMessageFor(u => u.Address1)
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-3">
+            @Html.LabelFor(c => c.Address2)
+            @Html.TextBoxFor(c => c.Address2,
+                new { @class = "form-control" })
+            @Html.ValidationMessageFor(u => u.Address2)
+        </div>
+    </div>
+
+    <div class="form-group form-row">
+        <div class="col-md-3">
+            @Html.LabelFor(c => c.City)
+            @Html.TextBoxFor(c => c.City,
+                new { @class = "form-control" })
+            @Html.ValidationMessageFor(u => u.Address1)
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-3">
+            @Html.LabelFor(c => c.PostCode)
+            @Html.TextBoxFor(c => c.PostCode,
+                new { @class = "form-control" })
+            @Html.ValidationMessageFor(u => u.Address2)
+        </div>
+    </div>
+
+
+    <div class="form-row photo-container">
+        <div class="col-md-6"></div>
+        <div class="form-group col-md-3">
+            @{
+                if (Model.PhotoPath == null)
+                {
+                    Model.PhotoPath = "ImageDefault.png";
+                }
+            }
+            @Html.LabelFor(p => p.Photo)
+            <div class="col-md-10">
+                <img src="~/images/@Url.Content(Model.PhotoPath)" style="margin:10px" width="200" id="imagePreview" />
+                <input id="imageBrowes" type="file" name="Photo" accept="image/jpeg, image/png" onchange="ShowImagePreview(this, document.getElementById('imagePreview'))" />
+            </div>
+        </div>
+    </div>
+
+
+
+    @Html.HiddenFor(u => u.Id)
+    <br />
+    <div class="row">
+
+
+        <button id="save" type="button" value="Submit" class="btn btn-primary">Save</button>
+
+        <div class="col-md-2">
+
+        </div>
+
+        <button type="button" class="btn btn-dark"
+                onclick="location.href = '@Url.Action("Profile", "Account")'">
+            Come back
+        </button>
+
+    </div>
+   
+</form>
+
+
+
+@section Scripts{
+    <script src="~/js/main.js"></script>
+    <script>
+        //Obsługa formularza
+        $(document).ready(function () {
+            $('#save').click(function () {
+                $.validator.unobtrusive.parse(myForm);
+                if ($(myForm).valid()) {
+                    var file = $('#imageBrowes').get(0).files;
+                    var data = new FormData(myForm);
+                    data.append('Photo', file[0]);
+
+
+                    var ajaxConfig = {
+                        type: "POST",
+                        url: "/Account/EditProfile",
+                        data: data,
+                        success: function (response) {
+                            alert("Save successfully!");
+                            window.location.replace("/Account/Profile");
+
+                        },
+                        error: function (xhr, status) {
+                            alert('Something wrong :///');
+                        }
+                    }
+
+                    if ($(myForm).attr('enctype') == "multipart/form-data") {
+                        ajaxConfig["contentType"] = false;
+                        ajaxConfig["processData"] = false;
+                    }
+
+                    $.ajax(ajaxConfig);
+                }
+            });
+        });
+    </script>
+}
+
+<style>
+
+    #myForm {
+        position: relative;
+    }
+
+    .photo-container {
+        position: absolute;
+        top: 140px;
+        right: 150px;
+    }
+</style>

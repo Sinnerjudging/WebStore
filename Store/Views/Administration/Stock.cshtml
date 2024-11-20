@@ -1,0 +1,109 @@
+﻿@model Store.ViewModels.StockViewModel
+
+@{
+    ViewData["Title"] = "Stock";
+}
+
+@{
+    await Html.RenderPartialAsync("Partial/_nav_product");
+}
+
+
+@if (Model.Stock.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Size</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var stock in Model.Stock)
+            {
+                <tr>
+                    <th scope="row">@stock.Id</th>
+                    <td>@stock.Name</td>
+                    <td>@stock.Qty</td>
+                    <td>@Html.ActionLink("Edit", "EditStock", "Administration", new { id = stock.Id })</td>
+                    <td>@Html.ActionLink("Delete", "DeleteStock", "Administration", new { id = stock.Id })</td>
+
+                </tr>
+
+            }
+        </tbody>
+
+    </table>
+
+}
+
+<h4>Add</h4>
+<br />
+<form id="myForm">
+
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            @Html.LabelFor(x => x.Name)
+            @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            @Html.LabelFor(x => x.Qty)
+            @Html.TextBoxFor(x => x.Qty, new { @class = "form-control" })
+        </div>
+    </div>
+    @Html.HiddenFor(x => x.ProductId)
+
+    <br />
+    <button id="save" type="button" value="Submit" class="btn btn-primary">Add</button>
+
+
+</form>
+
+
+<br />
+<button type="button" class="btn btn-dark"
+        onclick="location.href = '@Url.Action("Products", "Administration")'">
+    Cancel to the product list
+</button>
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+
+            $('input.form-control').val("");
+
+
+            $('#save').click(function () {
+                $.validator.unobtrusive.parse(myForm);
+                if ($(myForm).valid()) {
+                    var data = $(myForm).serialize()
+
+
+                    var ajaxConfig = {
+                        type: "POST",
+                        url: "/Administration/Stock",
+                        data: data,
+                        success: function (response) {
+                            location.reload();
+
+                        },
+                        error: function (xhr, status) {
+                            alert('Something wrong :///');
+                        }
+                    }
+                    $.ajax(ajaxConfig);
+                }
+            });
+        });
+    </script>
+
+}

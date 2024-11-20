@@ -1,0 +1,53 @@
+﻿@model Store.Models.User
+@{
+    ViewData["Title"] = "Info";
+    var photoPath = "~/Images/" + (Model.PhotoPath ?? "noimage.png");
+}
+@{
+    await Html.RenderPartialAsync("Partial/_nav_product");
+}
+    <br />
+<h1 class="display-4">@Model.FirstName @Html.DisplayText(" ") @Model.LastName</h1>
+<hr />
+<br />
+<button id="delete-button" data-user-id="@Model.Id" type="button" class="btn btn-danger btn-sm js-delete-user">Delete</button>
+
+@if (Model.PhotoPath != null)
+{
+    <img src="@photoPath" class="rounded float-right img-fluid" asp-append-version="true" style="height: 25%; width: 25%;">
+}
+
+<div class="card-body text-center">
+
+    <ul>
+
+        <li>Email: @Model.Email</li>
+        <li>Gender@Model.Gender.Name</li>
+        <li>PhoneNumber @Model.PhoneNumber</li>
+        <li>City: @Model.City</li>
+
+    </ul>
+
+</div>
+
+
+
+<script>
+
+    $(document).ready(function () {
+        $(".js-delete-user").click(function (e) {
+            var button = $(e.target);
+            var id = button.attr("data-user-id");
+            $.ajax({
+                url: '/api/account/'.concat(id),
+                type: 'DELETE',
+                success: function (response) {
+                    $("#".concat(delete -button)).fadeOut();
+                    alert("Usunięto");
+                }
+            });
+        });
+    });
+
+
+</script>

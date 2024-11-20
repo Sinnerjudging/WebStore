@@ -1,0 +1,188 @@
+﻿@model Store.ViewModels.ProductFormViewModel
+
+@{
+    ViewData["Title"] = "Product Form";
+}
+
+@{
+    await Html.RenderPartialAsync("Partial/_nav_product");
+}
+<br />
+
+@*<form enctype="multipart/form-data" asp-controller="Product" asp-action="AddProduct" method="post">*@
+<form id="myForm" enctype="multipart/form-data">
+
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary()
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            @Html.LabelFor(p => p.CategoryId)
+            @Html.DropDownListFor(p => p.CategoryId,
+                new SelectList(Model.Categories, "Id", "Name")
+                , new { @class = "form-control", @id = "drop-down-list-types" })
+            @Html.ValidationMessageFor(p => p.CategoryId)
+        </div>
+
+
+      @*   <div class="form-group col-md-2">
+
+            @Html.LabelFor(p => p.BrandId)
+            @Html.DropDownListFor(p => p.BrandId,
+                new SelectList(Model.Brands, "Id", "Name")
+                , new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.BrandId)
+
+        </div>
+ *@
+        <div class="form-group col-md-2">
+
+            @Html.LabelFor(p => p.ColorId)
+            @Html.DropDownListFor(p => p.ColorId,
+                new SelectList(Model.Colors, "Id", "Name")
+                , new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.ColorId)
+        </div>
+
+        <div class="form-group col-md-2">
+
+            @Html.LabelFor(p => p.SexId)
+            @Html.DropDownListFor(p => p.SexId,
+                new SelectList(Model.Sexes, "Id", "Name")
+                , new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.SexId)
+
+        </div>
+
+
+    </div>
+    <br />
+
+    <div class="form-row">
+
+        <div class="form-group col-md-4">
+
+            @Html.LabelFor(p => p.Name)
+            @Html.TextBoxFor(p => p.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.Name)
+
+        </div>
+
+    </div>
+    <div class="form-row">
+
+        <div class="form-group col-md-4">
+
+            @Html.LabelFor(p => p.Description)
+            @Html.TextAreaFor(p => p.Description, new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.Description)
+        </div>
+
+    </div>
+
+
+
+    <div class="form-row">
+
+        <div class="form-group col-md-1">
+            @Html.LabelFor(p => p.Price)
+            @Html.TextBoxFor(p => p.Price, new { @class = "form-control" })
+            @*@Html.ValidationMessageFor(p => p.Price)*@
+        </div>
+
+    </div>
+    <div class="form-row">
+        @{
+            if (Model.Id == 0)
+            {
+                <button id="save" type="button" value="Submit" class="btn btn-primary">Add</button>
+            }
+            else
+            {
+                @Html.HiddenFor(x => x.Id)
+
+                <button id="save" type="button" value="Submit" class="btn btn-primary">Save</button>
+
+            }
+        }
+    </div>
+
+    <div class="form-row photo-container">
+        <div class="col-md-6"></div>
+        <div class="form-group col-md-3">
+            @{
+                if (Model.PhotoPath == null)
+                {
+                    Model.PhotoPath = "ImageDefault.png";
+                }
+            }
+            @Html.LabelFor(p => p.Photo)
+            <div class="col-md-10">
+                <img src="~/images/@Url.Content(Model.PhotoPath)" style="margin:10px" width="200" id="imagePreview" />
+                <input id="imageBrowes" type="file" name="Photo" accept="image/jpeg, image/png" onchange="ShowImagePreview(this, document.getElementById('imagePreview'))" />
+            </div>
+        </div>
+
+    </div>
+
+
+</form>
+<br />
+
+<button type="button" class="btn btn-dark"
+        onclick="location.href = '@Url.Action("Products", "Administration")'">
+    Cancel do list
+</button>
+
+
+@section scripts{
+    <script src="~/js/main.js"></script>
+    <script>
+
+        //Obsługa formularza
+        $(document).ready(function () {
+            $('#save').click(function () {
+                $.validator.unobtrusive.parse(myForm);
+                if ($(myForm).valid()) {
+                    var file = $('#imageBrowes').get(0).files;
+                    var data = new FormData(myForm);
+                    data.append('Photo', file[0]);
+
+
+                    var ajaxConfig = {
+                        type: "POST",
+                        url: "/Administration/SaveProduct",
+                        data: data,
+                        success: function (response) {
+                            alert("Save successfully!");
+                        },
+                        error: function (xhr, status) {
+                            alert('Something wrong :///');
+                        }
+                    }
+
+                    if ($(myForm).attr('enctype') == "multipart/form-data") {
+                        ajaxConfig["contentType"] = false;
+                        ajaxConfig["processData"] = false;
+                    }
+
+                    $.ajax(ajaxConfig);
+                }
+            });
+        });
+    </script>
+
+}
+
+<style>
+
+    #myForm{
+        position:relative;
+    }
+    .photo-container{
+        position:absolute;
+        top:140px;
+        right:150px;
+    }
+</style>
+

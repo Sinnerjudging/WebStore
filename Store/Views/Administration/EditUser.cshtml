@@ -1,0 +1,147 @@
+﻿@model Store.ViewModels.UserFormViewModel
+@{
+    ViewData["Title"] = "Edit User Form";
+}
+
+@{
+    await Html.RenderPartialAsync("Partial/_nav_product");
+}
+<h1 class="display-4">Edit User Form</h1>
+
+<hr />
+<br />
+
+
+<form id="myForm" enctype="multipart/form-data">
+
+    @Html.AntiForgeryToken()
+
+    <div class="validation-summary-errors">
+        @Html.ValidationSummary()
+    </div>
+
+    <div class="form-row">
+        <div class="col">
+            @Html.LabelFor(u => u.FirstName)
+            @Html.TextBoxFor(u => u.FirstName,
+                new { @class = "form-control" })
+            @Html.ValidationMessageFor(u => u.FirstName)
+        </div>
+
+        <div class="col">
+            @Html.LabelFor(c => c.LastName)
+            @Html.TextBoxFor(c => c.LastName,
+                new { @class = "form-control" })
+            @Html.ValidationMessageFor(u => u.LastName)
+
+        </div>
+    </div>
+
+    <br />
+
+    <div class="form-group">
+        @Html.LabelFor(c => c.PhoneNumber)
+        @Html.TextBoxFor(c => c.PhoneNumber,
+            new { @class = "form-control" })
+        @Html.ValidationMessageFor(u => u.PhoneNumber)
+
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(c => c.City)
+        @Html.TextBoxFor(c => c.City,
+            new { @class = "form-control" })
+        @Html.ValidationMessageFor(u => u.City)
+    </div>
+
+    @*<div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupFileAddon01">Zdjęcie</span>
+            </div>
+            <div class="custom-file">
+                <input asp-for="Photo" class="custom-file-input" id="inputGroupFile01"
+                       aria-describedby="inputGroupFileAddon01" />
+                <label class="custom-file-label" for="inputGroupFile01">Wybierz plik</label>
+            </div>
+        </div>*@
+
+
+    <div class="form-group">
+        @{
+            if (Model.PhotoPath == null)
+            {
+                Model.PhotoPath = "ImageDefault.png";
+            }
+        }
+        @Html.LabelFor(p => p.Photo)
+        <div class="col-md-10">
+            <img src="~/images/@Url.Content(Model.PhotoPath)" style="margin:10px" width="200" id="imagePreview" />
+            <input id="imageBrowes" type="file" name="Photo" accept="image/jpeg, image/png" onchange="ShowImagePreview(this, document.getElementById('imagePreview'))" />
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(c => c.GenderId)
+        @Html.DropDownListFor(c => c.GenderId,
+            new SelectList(Model.Genders, "Id", "Name"),
+            "Select gender", new { @class = "form-control" })
+    </div>
+
+    @Html.HiddenFor(u => u.Id)
+    <br />
+    <button id="save" type="button" value="Submit" class="btn btn-primary">Save</button>
+</form>
+
+
+
+@section Scripts{
+    <script src="~/js/main.js"></script>
+    <script>
+        //Pokazuje nazwe wgranego pliku
+        $(document).ready(function () {
+            $('.custom-file-input').on("change",
+                function () {
+                    var fileName = $(this).val().split("\\").pop();
+                    $(this).next('.custom-file-label').html(fileName);
+                });
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#save').click(function () {
+                $.validator.unobtrusive.parse(myForm);
+                if ($(myForm).valid()) {
+                    var file = $('#imageBrowes').get(0).files;
+                    var data = new FormData(myForm);
+                    data.append('Photo', file[0]);
+
+
+                    var ajaxConfig = {
+                        type: "POST",
+                        url: "/Administration/EditUser",
+                        data: data,
+                        success: function (response) {
+                            alert("Successfully edited!");
+                        },
+                        error: function (xhr, status) {
+                            alert('Something wrong :///');
+                        }
+                    }
+
+                    if ($(myForm).attr('enctype') == "multipart/form-data") {
+                        ajaxConfig["contentType"] = false;
+                        ajaxConfig["processData"] = false;
+                    }
+
+                    $.ajax(ajaxConfig);
+                }
+            });
+        });
+    </script>
+}
+
+
+

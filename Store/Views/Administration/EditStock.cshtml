@@ -1,0 +1,72 @@
+﻿@model Store.Models.Stock
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@{
+    await Html.RenderPartialAsync("Partial/_nav_product");
+}
+
+    <form id="myForm">
+        @Html.ValidationSummary()
+
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                @Html.LabelFor(x => x.Name)
+                @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                @Html.LabelFor(x => x.Qty)
+                @Html.TextBoxFor(x => x.Qty, new { @class = "form-control" })
+            </div>
+        </div>
+        @Html.HiddenFor(x => x.ProductId)
+        @Html.HiddenFor(x => x.Id)
+
+
+        <br />
+        <button id="save" type="submit" class="btn btn-primary">Save</button>
+
+    </form>
+
+<br />
+
+
+<button type="button" class="btn btn-dark"
+        onclick="location.href = '@Url.Action("Stock", "Administration", new { id = Model.ProductId })'">
+    Cancel do list
+</button>
+
+
+
+@section scripts{
+
+    <script>
+        //poprawić ten skrypt trzeba bo raz działa a raz nie
+        $(document).ready(function () {
+            $('#save').click(function () {
+                $.validator.unobtrusive.parse(myForm);
+                if ($(myForm).valid()) {
+                    var data = $(myForm).serialize()
+
+                    var ajaxConfig = {
+                        type: "POST",
+                        url: "/Administration/Stock",
+                        data: data,
+                        success: function (response) {
+                            window.location.replace("/Administration/Stock/".concat('@Model.ProductId'));
+                        },
+                        error: function (xhr, status) {
+                            alert('Something went wrong :///');
+                        }
+                    }
+                    $.ajax(ajaxConfig);
+                }
+            });
+        });
+    </script>
+
+}

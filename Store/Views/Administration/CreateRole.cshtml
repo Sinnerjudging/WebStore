@@ -1,0 +1,35 @@
+﻿@model Store.ViewModels.CreateRoleViewModel
+@{
+    ViewData["Title"] = "Create new role";
+}
+@{
+    await Html.RenderPartialAsync("Partial/_nav_product");
+}
+<br />
+
+<h1>Creta new role</h1>
+<br />
+<hr />
+
+
+@using (Html.BeginForm("CreateRole", "Administration"))
+{
+    @Html.AntiForgeryToken()
+
+    <div>
+        @Html.ValidationSummary()
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(u => u.RoleName)
+        @Html.TextBoxFor(u => u.RoleName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(u => u.RoleName)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add</button>
+    <a class="btn btn-danger"
+       asp-controller="Administration" asp-action="Roles">
+        Cancel
+    </a>
+
+}
+

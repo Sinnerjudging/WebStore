@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Store.Models.Role>
+@{
+    ViewData["Title"] = "Roles";
+}
+@{
+    await Html.RenderPartialAsync("Partial/_nav_product");
+}
+
+<br />
+
+@if (Model.Any())
+{
+    <a class="btn btn-dark mb-3"
+       asp-controller="Administration" asp-action="CreateRole">
+        Add
+    </a>
+
+
+    foreach (var role in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-header">
+                Id: @role.Id
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">@role.Name</h5>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-primary" asp-controller="Administration" asp-action="EditRole" asp-route-id="@role.Id">
+                    Edit
+                </a>
+                <a href="#" class="btn btn-danger">Delete</a>
+            </div>
+
+        </div>
+    }
+}
+else
+{
+
+    <div class="card">
+        <div class="card-header">
+            There are no roles
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                Use the button below to create them
+            </h5>
+            <a class="btn btn-primary"
+               asp-controller="Administration" asp-action="CreateRole">
+                Create a role
+            </a>
+        </div>
+    </div>
+
+
+}
+

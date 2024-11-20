@@ -1,0 +1,55 @@
+﻿@model Store.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1 class="display-4">
+    Log in!
+</h1>
+<hr />
+<br />
+
+
+
+@using (Html.BeginForm("Login", "Account", new { ReturnUrl = Context.Request.Query["ReturnUrl"] }))
+{
+    @Html.AntiForgeryToken()
+
+    <div>
+        @Html.ValidationSummary()
+    </div>
+
+    <div class="form-row form-group">
+        <div class="col-md-4">
+            @Html.LabelFor(u => u.UserName)
+            @Html.TextBoxFor(u => u.UserName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(u => u.UserName)
+        </div>
+
+        <div class="col-md-3">
+        </div>
+
+        <div class="col-md-3">
+            <p>You dont have an account yet?</p>
+            <button type="button" class="btn btn-dark"
+                    onclick="location.href = '@Url.Action("Register", "Account")'">
+                Register
+            </button>
+        </div>
+
+    </div>
+
+    <div class="form-row form-group">
+        <div class="col-md-4">
+            @Html.LabelFor(u => u.Password)
+            @Html.PasswordFor(u => u.Password, new { @class = "form-control" })
+            @Html.ValidationMessageFor(u => u.Password)
+        </div>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">Log in</button>
+}
+
+<br />
+

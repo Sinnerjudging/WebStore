@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Store.Models.User>
+@{
+    ViewData["Title"] = "Users";
+}
+
+@{
+    await Html.RenderPartialAsync("Partial/_nav_product");
+}
+<br />
+
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Login</th>
+            <th scope="col">FullName</th>
+            <th scope="col">Action</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr id="@user.Id">
+                <td>
+                    @Html.ActionLink(@user.UserName, "UserDetails", "Administration", new { Id = user.Id })
+                </td>
+                <td>@user.FirstName @Html.DisplayText(" ") @user.LastName</td>
+                <td>
+                    @Html.ActionLink("Edit", "EditUser",
+                        "Administration", new { Id = user.Id })
+                </td>
+                <td>
+                    <button data-user-id="@user.Id" type="button" class="btn btn-danger btn-sm js-delete-user">Delete</button>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+
+
+@section scripts
+{
+
+    <script>
+        $(document).ready(function () {
+            $(".js-delete-user").click(function (e) {
+                var button = $(e.target);
+                var id = button.attr("data-user-id");
+                $.ajax({
+                    url: '/api/administration/'.concat(id),
+                    type: 'DELETE',
+                    success: function (response) {
+                        $("#".concat(id)).fadeOut();
+                    }
+                });
+            });
+        });
+    </script>
+
+}

@@ -1,0 +1,209 @@
+﻿@using Store.Models
+@inject SignInManager<User> signInManager
+@inject UserManager<User> userManager
+
+<header>
+    <nav class="navbar navbar-expand-xl navbar-toggleable-xl navbar-light bg-white border-bottom box-shadow mb-3">
+        <header class="header container-fluid">
+            <div class="header-wrapper container">
+                <div class="header-inner row">
+                    <div class="header-logo col-2">
+                        <div class="logo">
+                            <a asp-controller="Home" asp-action="Index" title="Koi-service" class="logo-link">
+                                <img src="https://koiservice.vn/wp-content/uploads/2023/03/logo-Koiservice.png" alt="logo">
+                            </a>
+                        </div>
+                    </div>
+                    <nav class="nav-bar col-10">
+                        <div class="navbar-collapse collapse d-sm-inline-flex ">
+                           <ul class="nav-list">
+                                <li class="nav-item"><a asp-controller="Store" asp-action="Index">CÁ KOI</a></li>
+                            <li class="nav-item dropdown">
+                                    <a asp-controller="Account" asp-action="KoiFood">
+                                    THỨC ĂN
+                                    <i class="fa-solid fa-angle-down"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                    <a asp-controller="Store" asp-action="Index">
+                                    DỊCH VỤ CÁ KOI
+                                    <i class="fa-solid fa-angle-down"></i>
+                                </a>
+                            </li>
+                                <li class="nav-item"><a asp-controller="Account" asp-action="News">TIN TỨC</a></li>
+                                <li class="nav-item"><a asp-controller="Account" asp-action="Contact">LIÊN HỆ</a></li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Administration" asp-action="Index">Manage</a>
+                                </li>
+                            }
+                        </ul>
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item">
+                                    <a asp-area="" asp-controller="Store" asp-action="Cart"><img src="~/images/cart.png" class="d-inline-block align-top" alt="" height="40" /></a>
+                                </li>
+
+                                @if (signInManager.IsSignedIn(User))
+                                {
+                                    @if (@userManager.GetUserAsync(User).Result.PhotoPath == null)
+                                    {
+                                        <li class="nav-item">
+                                            <img src="~/images/noimage.png" class="d-inline-block align-top" alt="" height="40" />
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="nav-item">
+                                            <img src="~/images/@userManager.GetUserAsync(User).Result.PhotoPath" class="d-inline-block align-top" alt="" height="40" />
+                                        </li>
+                                    }
+                                    <li class="nav-item dropdown text-dark">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            @User.Identity.Name
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Account" asp-action="Profile">My profile</a>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Account" asp-action="OrdersHistory">History of orders</a>
+
+                                            <div class="dropdown-divider"></div>
+
+                                            <form class="nav-link text-dark" method="post" asp-action="Logout" asp-controller="Account">
+                                                <button type="submit" class="nav-link btn btn-link py-0 dropdown-item text-dark">
+                                                    Log out
+                                                </button>
+                                            </form>
+
+                                        </div>
+                                    </li>
+
+                                }
+                                else
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Log in</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                                    </li>
+                                }
+
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        @* <div class="container">
+            <a class="navbar-brand" asp-controller="Store" asp-action="Index">
+                <img src="~/images/logo-ca-Koi-25.png" width="45" height="30" class="d-inline-block align-top" alt="">
+                Store
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex ">
+                <ul class="navbar-nav flex-grow-1">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Administration" asp-action="Index">Manage</a>
+                        </li>
+                    }
+                </ul>
+
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a asp-area="" asp-controller="Store" asp-action="Cart"><img src="~/images/cart.png" class="d-inline-block align-top" alt="" height="40" /></a>
+                    </li>
+                    <li class="nav-item" style="margin-right:30px">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Store" asp-action="Cart" id="cart">Cart</a>
+                    </li>
+
+
+                    @if (signInManager.IsSignedIn(User))
+                    {
+                        @if (@userManager.GetUserAsync(User).Result.PhotoPath == null)
+                        {
+                            <li class="nav-item">
+                                <img src="~/images/noimage.png" class="d-inline-block align-top" alt="" height="40" />
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <img src="~/images/@userManager.GetUserAsync(User).Result.PhotoPath" class="d-inline-block align-top" alt="" height="40" />
+                            </li>
+                        }
+                        <li class="nav-item dropdown text-dark">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @User.Identity.Name
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Account" asp-action="Profile">My profile</a>
+                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Account" asp-action="OrdersHistory">History of orders</a>
+
+                                <div class="dropdown-divider"></div>
+
+                                <form class="nav-link text-dark" method="post" asp-action="Logout" asp-controller="Account">
+                                    <button type="submit" class="nav-link btn btn-link py-0 dropdown-item text-dark">
+                                        Log out
+                                    </button>
+                                </form>
+
+                            </div>
+                        </li>
+
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Log in</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+        </div>*@
+    </nav>
+
+
+
+
+
+</header>
+
+
+<script>
+
+
+    $(document).ready(function () {
+
+        var counter = readCookie('counter');
+        if (counter != 0 && counter != null) {
+            $('#cart').text('Cart ('.concat(counter).concat(')'));
+        }
+
+    });
+
+
+    function readCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+</script>
+
+

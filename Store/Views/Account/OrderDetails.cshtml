@@ -1,0 +1,121 @@
+﻿@model Store.Models.Order
+@{
+    ViewData["Title"] = "OrderDetails";
+}
+@{decimal priceSum = 0; }
+
+<br />
+
+
+<h2>Order Info</h2>
+<p>Quantity of items: @Model.OrderProducts.Count</p>
+
+
+<table class="table table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>
+            </th>
+            <th>
+                Item
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Size
+            </th>
+            <th>
+                Total amount
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderProducts)
+        {
+            var product = item.Stock.Product;
+
+        <tr>
+            <td>
+                <img src="~/images/@product.PhotoPath" alt="Product img" height="40" />
+            </td>
+
+            <td>
+                 @product.Name
+            </td>
+
+            <td>
+                @item.Qty
+            </td>
+
+            <td>
+                @item.Stock.Name
+
+                @if (product.CategoryId == 1)
+                {
+                    @Html.Raw("cm");
+                }
+            </td>
+
+            <td>
+                @{ 
+                    var cost = item.Qty * product.Price;
+                }
+                @cost
+            </td>
+        </tr>
+
+            priceSum += product.Price * item.Qty;
+        }
+
+    </tbody>
+
+</table>
+<p>Total price : @priceSum vnd</p>
+
+<br />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <button type="button" class="btn btn-dark"
+                    onclick="location.href = '@Url.Action("OrdersHistory", "Account")'">
+                Go back to your order history
+            </button>
+        </div>
+
+        <div class="col-md-5">
+
+        </div>
+
+
+        @if (!Model.IsSend)
+        {
+            <div class="col-md-4">
+                <button type="button" class="btn btn-danger"
+                        onclick="location.href = '@Url.Action("CancelOrder", "Account", new { id = Model.Id })'">
+                    Cancel order
+                </button>
+            </div>
+        }
+
+    </div>
+</div>
+
+
+
+
+
+@section scripts{ 
+
+
+    <script>
+
+
+
+
+
+    </script>
+
+
+
+}

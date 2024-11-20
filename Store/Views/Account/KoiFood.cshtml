@@ -1,0 +1,221 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koi Fish Food Products</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            margin: auto;
+        }
+
+        .container {
+            display: flex;
+        }
+        /* Sidebar styling */
+        .sidebar {
+            padding-right: 20px;
+            border-right: 1px solid #ddd;
+        }
+
+            .sidebar h3 {
+                font-size: 18px;
+                color: #333;
+                margin-bottom: 10px;
+            }
+
+            .sidebar ul {
+                list-style: none;
+                padding: 0;
+            }
+
+                .sidebar ul li {
+                    margin-bottom: 8px;
+                }
+
+                    .sidebar ul li a {
+                        color: #e63946;
+                        text-decoration: none;
+                    }
+        /* Main content styling */
+        .main-content {
+            padding-left: 20px;
+        }
+
+            .main-content h2 {
+                font-size: 24px;
+                color: #333;
+                margin-bottom: 10px;
+            }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+        }
+
+            .product-card img {
+                width: 100%;
+                height: auto;
+            }
+
+            .product-card .sale-tag {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                background-color: red;
+                color: white;
+                padding: 5px;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+
+            .product-card h3 {
+                font-size: 18px;
+                color: #333;
+                margin: 10px 0 5px;
+            }
+
+            .product-card p {
+                font-size: 14px;
+                color: #888;
+            }
+
+            .product-card .old-price {
+                text-decoration: line-through;
+                color: #888;
+            }
+
+            .product-card .new-price {
+                font-size: 16px;
+                color: #e63946;
+                font-weight: bold;
+            }
+
+        .sort-options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+            .sort-options select {
+                padding: 5px;
+                font-size: 14px;
+            }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Koi Fish Food</h1>
+        <p>Discover high-quality food options for your Koi fish</p>
+    </header>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+        </aside>
+
+        <!-- Main Content -->
+        <section class="main-content">
+            <div class="sort-options">
+            </div>
+
+            <div class="products">
+                <!-- Product Card 1 -->
+                <div class="product-card">
+                    <div class="sale-tag">Sale!</div>
+                    <img src="~/images/thucan01.jpg" alt="Mega Balance Koi Food">
+                    <h3>MEGA BALANCE</h3>
+                    <p>Bột Mega Balance: Loại bao 15kg</p>
+                    <p><span class="old-price">2,100,000 đ</span> <span class="new-price">0 đ</span></p>
+                </div>
+
+                <!-- Product Card 2 -->
+                <div class="product-card">
+                    <img src="~/images/thucan02.jpg" alt="Mega Jumbo Koi Food">
+                    <h3>MEGA JUMBO</h3>
+                    <p>Bột Mega Jumbo: Loại bao 15kg</p>
+                    <p><span class="old-price">2,300,000 đ</span> <span class="new-price">0 đ</span></p>
+                </div>
+
+                <!-- Product Card 3 -->
+                <div class="product-card">
+                    <div class="sale-tag">Sale!</div>
+                    <img src="~/images/thucan03.jpg" alt="Sakura H1 Koi Food">
+                    <h3>SAKURA H1 - GROWTH</h3>
+                    <p>Bột Sakura H1 – Growth: loại 6,5kg và 15kg</p>
+                    <p><span class="old-price">1,150,000 đ</span> <span class="new-price">0 đ</span></p>
+                </div>
+
+                <!-- Repeat more product cards as needed -->
+                <!-- Example for additional products... -->
+                <div class="product-card">
+                    <div class="sale-tag">Sale!</div>
+                    <img src="~/images/thucan04.jpg" alt="Sakura 2 in 1 Koi Food">
+                    <h3>SAKURA 2 IN 1</h3>
+                    <p>Bột Sakura 2 In 1: loại 6,5Kg và 15kg</p>
+                    <p><span class="old-price">1,350,000 đ</span> <span class="new-price">0 đ</span></p>
+                </div>
+
+
+                <!-- Product Card 1 -->
+                <div class="product-card">
+                    <div class="sale-tag">Sale!</div>
+                    <img src="~/images/thucan05.jpg" alt="Mega Balance Koi Food">
+                    <h3>MEGA BALANCE</h3>
+                    <p>Bột Mega Balance: Loại bao 15kg</p>
+                    <p><span class="old-price">2,100,000 đ</span> <span class="new-price">0 đ</span></p>
+                </div>
+
+                <!-- Product Card 2 -->
+                <div class="product-card">
+                    <img src="~/images/thucan06.jpg" alt="Mega Jumbo Koi Food">
+                    <h3>MEGA JUMBO</h3>
+                    <p>Bột Mega Jumbo: Loại bao 15kg</p>
+                    <p><span class="old-price">2,300,000 đ</span> <span class="new-price">0 đ</span></p>
+                </div>
+
+                <!-- Product Card 3 -->
+                <div class="product-card">
+                    <div class="sale-tag">Sale!</div>
+                    <img src="~/images/thucan07.jpg" alt="Sakura H1 Koi Food">
+                    <h3>SAKURA H1 - GROWTH</h3>
+                    <p>Bột Sakura H1 – Growth: loại 6,5kg và 15kg</p>
+                    <p><span class="old-price">1,150,000 đ</span> <span class="new-price">0 đ</span></p>
+                </div>
+
+                <!-- Repeat more product cards as needed -->
+                <!-- Example for additional products... -->
+                <div class="product-card">
+                    <div class="sale-tag">Sale!</div>
+                    <img src="~/images/thucan08.jpg" alt="Sakura 2 in 1 Koi Food">
+                    <h3>SAKURA 2 IN 1</h3>
+                    <p>Bột Sakura 2 In 1: loại 6,5Kg và 15kg</p>
+                    <p><span class="old-price">1,350,000 đ</span> <span class="new-price">0 đ</span></p>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 KoiService.vn | All Rights Reserved</p>
+    </footer>
+
+</body>
+</html>
